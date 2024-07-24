@@ -7,11 +7,13 @@ import (
 	"strconv"
 
 	"github.com/tomp4l/aoc16/day1"
+	"github.com/tomp4l/aoc16/day2"
 )
 
 func main() {
 	days := map[int]Day{
 		1: day1.Day{},
+		2: day2.Day{},
 	}
 
 	args := os.Args
