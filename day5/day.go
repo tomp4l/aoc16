@@ -42,9 +42,7 @@ func password2(input string) string {
 				if _, ok := m[d]; !ok {
 					m[d] = hash[6:7]
 				}
-
 			}
-
 		}
 	}
 
