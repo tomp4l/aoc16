@@ -178,17 +178,6 @@ func (s *state) down() *floor {
 	return s.floor(s.elevator - 1)
 }
 
-func (s *state) clone() *state {
-	sn := new(state)
-	sn.elevator = s.elevator
-	sn.floor1 = &floor{maps.Clone(s.floor1.objects)}
-	sn.floor2 = &floor{maps.Clone(s.floor2.objects)}
-	sn.floor3 = &floor{maps.Clone(s.floor3.objects)}
-	sn.floor4 = &floor{maps.Clone(s.floor4.objects)}
-
-	return sn
-}
-
 func unsetCurrent(s *state, k string, chip bool) {
 	c := s.current().objects[k]
 	if chip {
@@ -213,25 +202,26 @@ func setFloor(f *floor, k string, chip bool) {
 	f.objects[k] = c
 }
 
-func (s *state) moveUpOne(k string, chip bool) *state {
-	if s.elevator == 4 {
-		return nil
-	}
-	s = s.clone()
-	unsetCurrent(s, k, chip)
-	setFloor(s.up(), k, chip)
-	s.elevator = s.elevator + 1
-	if s.isValid() {
-		return s
-	}
-	return nil
+func (s *state) moveUpOne(k string, c bool) *state {
+	return s.moveUpTwo(k, k, c, c)
 }
 
 func (s *state) moveDownOne(k string, chip bool) *state {
-	if s.elevator == 1 {
+	sn := *s
+	switch s.elevator {
+	case 1:
 		return nil
+	case 2:
+		sn.floor1 = &floor{maps.Clone(s.floor1.objects)}
+		sn.floor2 = &floor{maps.Clone(s.floor2.objects)}
+	case 3:
+		sn.floor2 = &floor{maps.Clone(s.floor2.objects)}
+		sn.floor3 = &floor{maps.Clone(s.floor3.objects)}
+	case 4:
+		sn.floor3 = &floor{maps.Clone(s.floor3.objects)}
+		sn.floor4 = &floor{maps.Clone(s.floor4.objects)}
 	}
-	s = s.clone()
+	s = &sn
 	unsetCurrent(s, k, chip)
 	setFloor(s.down(), k, chip)
 	s.elevator = s.elevator - 1
@@ -242,10 +232,21 @@ func (s *state) moveDownOne(k string, chip bool) *state {
 }
 
 func (s *state) moveUpTwo(k1, k2 string, c1, c2 bool) *state {
-	if s.elevator == 4 {
+	sn := *s
+	switch s.elevator {
+	case 1:
+		sn.floor1 = &floor{maps.Clone(s.floor1.objects)}
+		sn.floor2 = &floor{maps.Clone(s.floor2.objects)}
+	case 2:
+		sn.floor2 = &floor{maps.Clone(s.floor2.objects)}
+		sn.floor3 = &floor{maps.Clone(s.floor3.objects)}
+	case 3:
+		sn.floor3 = &floor{maps.Clone(s.floor3.objects)}
+		sn.floor4 = &floor{maps.Clone(s.floor4.objects)}
+	case 4:
 		return nil
 	}
-	s = s.clone()
+	s = &sn
 	unsetCurrent(s, k1, c1)
 	unsetCurrent(s, k2, c2)
 	setFloor(s.up(), k1, c1)
