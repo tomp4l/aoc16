@@ -33,7 +33,7 @@ func TestExample(t *testing.T) {
 		})
 
 		t.Run("it serialises", func(t *testing.T) {
-			assert.Equal(t, "E1F1HMLMF2HGF3LGF4", s.serialise())
+			assert.Equal(t, "E1G0M2G1M0G1M0G0M0", s.configuration())
 		})
 
 		t.Run("is valid", func(t *testing.T) {

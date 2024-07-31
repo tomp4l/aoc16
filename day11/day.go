@@ -3,7 +3,6 @@ package day11
 import (
 	"fmt"
 	"maps"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -48,32 +47,24 @@ type state struct {
 	floor4   *floor
 }
 
-func (f *floor) serialise() string {
-	keys := make([]string, 0)
-	for k := range f.objects {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	ret := make([]string, 0, len(keys))
-	for _, k := range keys {
-		ku := strings.ToUpper(k[:1])
-		cg := f.objects[k]
+func (f *floor) configuration() string {
+	gens := 0
+	chips := 0
+	for _, cg := range f.objects {
 		if cg.generator {
-			ku += "G"
+			gens += 1
 		}
 		if cg.chip {
-			ku += "M"
+			chips += 1
 		}
-
-		ret = append(ret, ku)
 	}
 
-	return strings.Join(ret, "")
+	return fmt.Sprintf("G%dM%d", gens, chips)
 }
 
-func (s *state) serialise() string {
-	return fmt.Sprintf("E%dF1%sF2%sF3%sF4%s", s.elevator,
-		s.floor1.serialise(), s.floor2.serialise(), s.floor3.serialise(), s.floor4.serialise())
+func (s *state) configuration() string {
+	return fmt.Sprintf("E%d%s%s%s%s", s.elevator,
+		s.floor1.configuration(), s.floor2.configuration(), s.floor3.configuration(), s.floor4.configuration())
 }
 
 func parse(input string) (s *state, err error) {
@@ -206,7 +197,11 @@ func (s *state) moveUpOne(k string, c bool) *state {
 	return s.moveUpTwo(k, k, c, c)
 }
 
-func (s *state) moveDownOne(k string, chip bool) *state {
+func (s *state) moveDownOne(k string, c bool) *state {
+	return s.moveDownTwo(k, k, c, c)
+}
+
+func (s *state) moveDownTwo(k1, k2 string, c1, c2 bool) *state {
 	sn := *s
 	switch s.elevator {
 	case 1:
@@ -222,8 +217,10 @@ func (s *state) moveDownOne(k string, chip bool) *state {
 		sn.floor4 = &floor{maps.Clone(s.floor4.objects)}
 	}
 	s = &sn
-	unsetCurrent(s, k, chip)
-	setFloor(s.down(), k, chip)
+	unsetCurrent(s, k1, c1)
+	unsetCurrent(s, k2, c2)
+	setFloor(s.down(), k1, c1)
+	setFloor(s.down(), k2, c2)
 	s.elevator = s.elevator - 1
 	if s.isValid() {
 		return s
@@ -262,7 +259,7 @@ func (s *state) moveUpTwo(k1, k2 string, c1, c2 bool) *state {
 func solve(initial *state) int {
 	seen := make(map[string]bool)
 	openStates := []*state{initial}
-	seen[initial.serialise()] = true
+	seen[initial.configuration()] = true
 
 	i := 0
 	for {
@@ -300,10 +297,14 @@ func solve(initial *state) int {
 						if v.chip && v2.chip {
 							su := s.moveUpTwo(k, k2, true, true)
 							newOpenStates = append(newOpenStates, su)
+							sd := s.moveDownTwo(k, k2, true, true)
+							newOpenStates = append(newOpenStates, sd)
 						}
 						if v.generator && v2.generator {
 							su := s.moveUpTwo(k, k2, false, false)
 							newOpenStates = append(newOpenStates, su)
+							sd := s.moveDownTwo(k, k2, false, false)
+							newOpenStates = append(newOpenStates, sd)
 						}
 					}
 				}
@@ -315,11 +316,11 @@ func solve(initial *state) int {
 			if s == nil {
 				continue
 			}
-			if seen[s.serialise()] {
+			if seen[s.configuration()] {
 				continue
 			}
 			openStates = append(openStates, s)
-			seen[s.serialise()] = true
+			seen[s.configuration()] = true
 		}
 		i++
 	}
