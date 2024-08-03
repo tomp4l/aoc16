@@ -1,11 +1,10 @@
 package day14
 
 import (
-	"crypto/md5"
-	"fmt"
-	"io"
 	"sort"
 	"strconv"
+
+	"github.com/tomp4l/aoc16/helpers"
 )
 
 type Day struct{}
@@ -82,21 +81,15 @@ func key64(salt string, hasher func(string, int) string) int {
 	}
 }
 
-func md5s(s string) string {
-	h := md5.New()
-	io.WriteString(h, s)
-	return fmt.Sprintf("%x", h.Sum(nil))
-}
-
 func md5si(s string, i int) string {
-	return md5s(s + strconv.Itoa(i))
+	return helpers.Md5String(s + strconv.Itoa(i))
 }
 
 func stretched(s string, i int) string {
 	h := md5si(s, i)
 
 	for i := 0; i < 2016; i++ {
-		h = md5s(h)
+		h = helpers.Md5String(h)
 	}
 
 	return h
