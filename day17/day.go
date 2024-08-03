@@ -8,13 +8,13 @@ import (
 
 type Day struct{}
 
-type direction int
+type direction rune
 
 const (
-	up direction = iota
-	down
-	left
-	right
+	up    direction = 'U'
+	down  direction = 'D'
+	left  direction = 'L'
+	right direction = 'R'
 )
 
 func (Day) Run(input string) (p1 string, p2 string, err error) {
@@ -28,16 +28,7 @@ func (Day) Run(input string) (p1 string, p2 string, err error) {
 func path(moves []direction) string {
 	path := ""
 	for _, d := range moves {
-		switch d {
-		case up:
-			path += "U"
-		case down:
-			path += "D"
-		case left:
-			path += "L"
-		case right:
-			path += "R"
-		}
+		path += string(d)
 	}
 	return path
 }
