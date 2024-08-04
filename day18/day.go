@@ -26,15 +26,11 @@ func extend(start []bool, length int) [][]bool {
 	for len(ret) < length {
 		next := make([]bool, len(last))
 
-		next[0] = !isTrap(false, !last[0], !last[1])
-		next[len(next)-1] = !isTrap(!last[len(next)-2], !last[len(next)-1], false)
+		next[0] = !isTrap(false, !last[1])
+		next[len(next)-1] = !isTrap(!last[len(next)-2], false)
 
 		for i := 1; i < len(last)-1; i++ {
-			l := !last[i-1]
-			c := !last[i]
-			r := !last[i+1]
-
-			if !isTrap(l, c, r) {
+			if !isTrap(!last[i-1], !last[i+1]) {
 				next[i] = true
 			}
 		}
@@ -46,11 +42,8 @@ func extend(start []bool, length int) [][]bool {
 	return ret
 }
 
-func isTrap(l, c, r bool) bool {
-	return (l && c && !r) ||
-		(c && r && !l) ||
-		(l && !c && !r) ||
-		(r && !c && !l)
+func isTrap(l, r bool) bool {
+	return l != r
 }
 
 func countSafe(cells [][]bool) (count int) {
