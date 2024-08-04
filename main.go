@@ -9,6 +9,7 @@ import (
 	"github.com/tomp4l/aoc16/day1"
 	"github.com/tomp4l/aoc16/day19"
 	"github.com/tomp4l/aoc16/day2"
+	"github.com/tomp4l/aoc16/day20"
 	"github.com/tomp4l/aoc16/day3"
 	"github.com/tomp4l/aoc16/day4"
 	"github.com/tomp4l/aoc16/day5"
@@ -49,6 +50,7 @@ func main() {
 		17: day17.Day{},
 		18: day18.Day{},
 		19: day19.Day{},
+		20: day20.Day{},
 	}
 
 	args := os.Args
