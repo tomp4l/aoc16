@@ -7,9 +7,7 @@ import (
 	"strconv"
 
 	"github.com/tomp4l/aoc16/day1"
-	"github.com/tomp4l/aoc16/day19"
 	"github.com/tomp4l/aoc16/day2"
-	"github.com/tomp4l/aoc16/day20"
 	"github.com/tomp4l/aoc16/day3"
 	"github.com/tomp4l/aoc16/day4"
 	"github.com/tomp4l/aoc16/day5"
@@ -27,6 +25,9 @@ import (
 	"github.com/tomp4l/aoc16/day16"
 	"github.com/tomp4l/aoc16/day17"
 	"github.com/tomp4l/aoc16/day18"
+	"github.com/tomp4l/aoc16/day19"
+	"github.com/tomp4l/aoc16/day20"
+	"github.com/tomp4l/aoc16/day21"
 )
 
 func main() {
@@ -51,6 +52,7 @@ func main() {
 		18: day18.Day{},
 		19: day19.Day{},
 		20: day20.Day{},
+		21: day21.Day{},
 	}
 
 	args := os.Args
