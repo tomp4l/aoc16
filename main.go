@@ -29,6 +29,9 @@ import (
 	"github.com/tomp4l/aoc16/day20"
 	"github.com/tomp4l/aoc16/day21"
 	"github.com/tomp4l/aoc16/day22"
+	"github.com/tomp4l/aoc16/day23"
+	"github.com/tomp4l/aoc16/day24"
+	"github.com/tomp4l/aoc16/day25"
 )
 
 func main() {
@@ -55,6 +58,9 @@ func main() {
 		20: day20.Day{},
 		21: day21.Day{},
 		22: day22.Day{},
+		23: day23.Day{},
+		24: day24.Day{},
+		25: day25.Day{},
 	}
 
 	args := os.Args

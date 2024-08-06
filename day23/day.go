@@ -1,4 +1,4 @@
-package day12
+package day23
 
 import (
 	"strconv"
@@ -14,12 +14,13 @@ func (Day) Run(input string) (p1 string, p2 string, err error) {
 		return
 	}
 	c := computer.NewComputer(ins)
+	c.SetReg("a", 7)
 	c.RunAll()
 
 	p1 = strconv.Itoa(c.Reg("a"))
 
 	c = computer.NewComputer(ins)
-	c.SetReg("c", 1)
+	c.SetReg("a", 12)
 	c.RunAll()
 
 	p2 = strconv.Itoa(c.Reg("a"))
